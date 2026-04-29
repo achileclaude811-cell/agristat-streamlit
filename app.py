@@ -96,13 +96,13 @@ REGIONS  = ["Adamaoua","Centre","Est","Extrême-Nord","Littoral","Nord","Nord-Ou
 with st.sidebar:
     st.markdown("<div style='text-align:center;padding:16px 0'><div style='font-size:48px'>🐄</div><div style='font-size:20px;font-weight:700;color:#4ade80'>AgriStat Pro</div><div style='font-size:11px;color:#9dc4ad;text-transform:uppercase;letter-spacing:1px'>Collecte & Analyse Élevage</div></div>", unsafe_allow_html=True)
     st.divider()
-    page = st.radio("", ["📊 Tableau de bord","➕ Nouvelle collecte","📋 Données collectées","🔬 Analyse descriptive","📥 Exporter"], label_visibility="collapsed")
+    page = st.radio("", [" Tableau de bord","➕ Nouvelle collecte","📋 Données collectées","🔬 Analyse descriptive","📥 Exporter"], label_visibility="collapsed")
     st.divider()
     df_s = get_all()
     st.markdown(f"<div style='text-align:center;font-size:12px;color:#9dc4ad'><b style='color:#4ade80'>{len(df_s)}</b> fiches | <b style='color:#f59e0b'>{int(df_s['effectif_total'].sum()) if not df_s.empty else 0:,}</b> animaux</div>", unsafe_allow_html=True)
     st.divider()
     st.caption("📚 INF232 EC2 — Université de Yaoundé I")
-    st.caption("🐍 Python · Streamlit · SQLite")
+    st.caption(" Python · Streamlit · SQLite")
 
 # ══════════════════════════════════════════════════════════════════════════════
 if page == "📊 Tableau de bord":
@@ -111,21 +111,21 @@ if page == "📊 Tableau de bord":
     st.divider()
     df = get_all()
     if df.empty:
-        st.warning("🐣 Aucune donnée. Ajoutez une fiche de collecte.")
+        st.warning(" Aucune donnée. Ajoutez une fiche de collecte.")
         st.stop()
 
     c1,c2,c3,c4,c5,c6 = st.columns(6)
     c1.metric("📋 Fiches",          len(df))
-    c2.metric("🐓 Animaux",         f"{int(df['effectif_total'].sum()):,}")
-    c3.metric("⚖️ Poids moy.",      f"{df['poids_moyen'].mean():.1f} kg")
-    c4.metric("💀 Mortalité moy.",  f"{df['taux_mortalite'].mean():.1f}%")
-    c5.metric("🥚 Production moy.", f"{df['production_journaliere'].mean():.0f}/j")
-    c6.metric("💉 Vaccinés",        f"{int(df['vaccination'].sum())}/{len(df)}")
+    c2.metric("Animaux",         f"{int(df['effectif_total'].sum()):,}")
+    c3.metric(" Poids moy.",      f"{df['poids_moyen'].mean():.1f} kg")
+    c4.metric(" Mortalité moy.",  f"{df['taux_mortalite'].mean():.1f}%")
+    c5.metric("Production moy.", f"{df['production_journaliere'].mean():.0f}/j")
+    c6.metric("Vaccinés",        f"{int(df['vaccination'].sum())}/{len(df)}")
     st.divider()
 
     col1,col2 = st.columns(2)
     with col1:
-        st.markdown("#### 🐓 Fiches par espèce")
+        st.markdown("####  Fiches par espèce")
         esp = df["espece"].value_counts().reset_index(); esp.columns=["Espèce","Fiches"]
         st.bar_chart(esp.set_index("Espèce"), color="#4ade80", height=250)
     with col2:
@@ -135,22 +135,22 @@ if page == "📊 Tableau de bord":
 
     col3,col4 = st.columns(2)
     with col3:
-        st.markdown("#### 💀 Mortalité par espèce (%)")
+        st.markdown("####  Mortalité par espèce (%)")
         mort = df.groupby("espece")["taux_mortalite"].mean().reset_index(); mort.columns=["Espèce","Mortalité(%)"]
         st.bar_chart(mort.set_index("Espèce"), color="#f87171", height=250)
     with col4:
-        st.markdown("#### 🌍 Effectif par région")
+        st.markdown("#### Effectif par région")
         reg = df.groupby("region")["effectif_total"].sum().reset_index(); reg.columns=["Région","Effectif"]
         st.bar_chart(reg.set_index("Région"), color="#f59e0b", height=250)
 
     col5,col6 = st.columns(2)
     with col5:
-        st.markdown("#### 💰 Revenu vs Coût par espèce (FCFA)")
+        st.markdown("####  Revenu vs Coût par espèce (FCFA)")
         eco = df.groupby("espece")[["cout_mensuel","revenu_mensuel"]].mean().round(0)
         eco.columns=["Coût moyen","Revenu moyen"]
         st.bar_chart(eco, height=250)
     with col6:
-        st.markdown("#### 🔵 Poids ↔ Production")
+        st.markdown("####  Poids ↔ Production")
         sc = df[["poids_moyen","production_journaliere"]].copy()
         sc.columns=["Poids (kg)","Production/j"]
         st.scatter_chart(sc, x="Poids (kg)", y="Production/j", height=250)
@@ -169,13 +169,13 @@ elif page == "➕ Nouvelle collecte":
         st.markdown("### 🗓️ Identification")
         c1,c2 = st.columns(2)
         date_collecte = c1.date_input("📅 Date de collecte *", value=date.today())
-        nom_eleveur   = c2.text_input("👤 Nom de l'éleveur *", placeholder="Nom complet")
+        nom_eleveur   = c2.text_input(" Nom de l'éleveur *", placeholder="Nom complet")
         c3,c4 = st.columns(2)
-        localite = c3.text_input("📍 Localité / Village *", placeholder="Ex: Mimboman")
-        region   = c4.selectbox("🗺️ Région", REGIONS)
+        localite = c3.text_input(" Localité / Village *", placeholder="Ex: Mimboman")
+        region   = c4.selectbox("Région", REGIONS)
         st.divider()
 
-        st.markdown("### 🐓 Espèce & Effectif")
+        st.markdown("###  Espèce & Effectif")
         c1,c2 = st.columns(2)
         espece          = c1.selectbox("🦎 Espèce animale *", ESPECES)
         systeme_elevage = c2.selectbox("🏠 Système d'élevage", SYSTEMES)
@@ -200,15 +200,15 @@ elif page == "➕ Nouvelle collecte":
         st.markdown("### 💉 Santé & Prévention")
         c1,c2 = st.columns(2)
         vaccination = c1.checkbox("✅ Vaccination effectuée ?")
-        type_vaccin = c2.text_input("💊 Type de vaccin", placeholder="Ex: Newcastle, Gumboro...")
-        maladies = st.text_input("🦠 Maladies / Symptômes", placeholder="Ex: Bronchite, Gale, Parasites...")
+        type_vaccin = c2.text_input(" Type de vaccin", placeholder="Ex: Newcastle, Gumboro...")
+        maladies = st.text_input("Maladies / Symptômes", placeholder="Ex: Bronchite, Gale, Parasites...")
         st.divider()
 
         st.markdown("### 💰 Données Économiques")
         c1,c2 = st.columns(2)
-        cout_mensuel   = c1.number_input("💸 Coût alimentation/mois (FCFA)", min_value=0.0, value=0.0, step=1000.0)
-        revenu_mensuel = c2.number_input("💵 Revenu mensuel estimé (FCFA)",  min_value=0.0, value=0.0, step=1000.0)
-        observations = st.text_area("📝 Observations", height=80, placeholder="Remarques, recommandations...")
+        cout_mensuel   = c1.number_input("Coût alimentation/mois (FCFA)", min_value=0.0, value=0.0, step=1000.0)
+        revenu_mensuel = c2.number_input("Revenu mensuel estimé (FCFA)",  min_value=0.0, value=0.0, step=1000.0)
+        observations = st.text_area(" Observations", height=80, placeholder="Remarques, recommandations...")
         st.divider()
 
         submitted = st.form_submit_button("💾 Enregistrer la fiche", use_container_width=True)
@@ -260,20 +260,20 @@ elif page == "📋 Données collectées":
         r = row.iloc[0]
         if action == "👁️ Voir":
             c1,c2,c3,c4 = st.columns(4)
-            c1.metric("👤 Éleveur",    r["nom_eleveur"])
-            c2.metric("📍 Localité",   f"{r['localite']}, {r['region']}")
-            c3.metric("🐓 Espèce",     r["espece"])
-            c4.metric("📅 Date",       r["date_collecte"])
+            c1.metric(" Éleveur",    r["nom_eleveur"])
+            c2.metric(" Localité",   f"{r['localite']}, {r['region']}")
+            c3.metric(" Espèce",     r["espece"])
+            c4.metric(" Date",       r["date_collecte"])
             c1,c2,c3,c4 = st.columns(4)
-            c1.metric("📦 Effectif",   f"{r['effectif_total']} animaux")
-            c2.metric("⚖️ Poids",      f"{r['poids_moyen']} kg")
-            c3.metric("🏥 Santé",      r["etat_sante"])
-            c4.metric("💀 Mortalité",  f"{r['taux_mortalite']}%")
+            c1.metric("Effectif",   f"{r['effectif_total']} animaux")
+            c2.metric(" Poids",      f"{r['poids_moyen']} kg")
+            c3.metric(" Santé",      r["etat_sante"])
+            c4.metric(" Mortalité",  f"{r['taux_mortalite']}%")
             c1,c2,c3,c4 = st.columns(4)
-            c1.metric("🥚 Production", f"{r['production_journaliere']}/j")
-            c2.metric("💉 Vacciné",    "Oui" if r["vaccination"] else "Non")
-            c3.metric("💸 Coût/mois",  f"{r['cout_mensuel']:,.0f} FCFA")
-            c4.metric("💵 Revenu",     f"{r['revenu_mensuel']:,.0f} FCFA")
+            c1.metric(" Production", f"{r['production_journaliere']}/j")
+            c2.metric(" Vacciné",    "Oui" if r["vaccination"] else "Non")
+            c3.metric(" Coût/mois",  f"{r['cout_mensuel']:,.0f} FCFA")
+            c4.metric("Revenu",     f"{r['revenu_mensuel']:,.0f} FCFA")
             if r["cout_mensuel"] > 0:
                 rent = (r["revenu_mensuel"]-r["cout_mensuel"])/r["cout_mensuel"]*100
                 if rent > 0: st.success(f"📈 Rentabilité : **+{rent:.1f}%** — Élevage rentable")
