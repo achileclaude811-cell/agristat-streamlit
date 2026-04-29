@@ -5,7 +5,7 @@ import statistics
 from datetime import date
 import os
 
-st.set_page_config(page_title="AgriStat Pro 🐄", page_icon="🐄", layout="wide")
+st.set_page_config(page_title="ACNAAstat", page_icon="🐄", layout="wide")
 
 st.markdown("""
 <style>
